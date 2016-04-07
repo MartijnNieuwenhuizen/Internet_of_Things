@@ -2,7 +2,7 @@
 #define EIoTCloudRestApiConfigi_h
 
 // define your access point username and password
-#define AP_SSID     "iPhone van R"
+#define AP_SSID     "iPhone van Martijn"
 #define AP_PASSWORD "wortels18"
 
 
