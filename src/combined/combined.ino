@@ -5,8 +5,11 @@
 #include <EIoTCloudRestApiConfig.h>
 
 // Setup the WiFi
-char ssid[] = "iPhone van Martijn"; //  your network SSID (name) 
-char pass[] = "wortels18"; // your network password
+//char ssid[] = "FRITZ!Box Fon WLAN 7340"; //  Network Name
+//char pass[] = "3608432098104837"; // Network Password
+char ssid[] = "iPhone van Martijn";
+char pass[] = "wortels18";
+
 int status = WL_IDLE_STATUS;
 WiFiClient  client;
 
