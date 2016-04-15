@@ -3,8 +3,11 @@
 #include <ArduinoJson.h>
 
 // WiFi Settings
-char ssid[] = "FRITZ!Box Fon WLAN 7340"; //  Network Name
-char password[] = "3608432098104837"; // Network Password
+//char ssid[] = "FRITZ!Box Fon WLAN 7340"; //  Network Name
+//char password[] = "3608432098104837"; // Network Password
+
+char ssid[] = "iPhone van Martijn"; //  Network Name
+char password[] = "wortels18"; // Network Password
 
 // Host + Path (needed for GET Connection)
 char* host = "www.martijnnieuwenhuizen.nl";
@@ -13,8 +16,8 @@ const int httpPort = 80;
 
 // RGB Led Setup
 int redLed = D1;
-int blueLed = D2;
-int greenLed = D3;
+int greenLed = D2;
+int blueLed = D3;
 
 // Setup Wifi Client + Ip
 WiFiClient client;
@@ -80,22 +83,59 @@ void loop() {
       }
 
       // Make the decision to turn off or on the LED
-      if (strcmp(json_parsed["light"], "on") == 0) {
+      if (strcmp(json_parsed["light"], "green") == 0) {
         setColor(255, 0, 0);
-//        digitalWrite(led, HIGH); 
-        Serial.println("LED ON");
+        Serial.println("LED green");
+      }
+      else if (strcmp(json_parsed["light"], "red") == 0) {
+        setColor(0, 255, 0);
+        Serial.println("led red");
+      }
+      else if (strcmp(json_parsed["light"], "blue") == 0) {
+        setColor(0, 0, 255);
+        Serial.println("led blue");
       }
       else {
-        setColor(0, 255, 0);
-//        digitalWrite(led, LOW);
-        Serial.println("led off");
+        setColor(255, 255, 255);
+        Serial.println("led all");
       }
     }
   }
-    
+
+  // POST
+ // Define data
+ String data;
+ String light;
+ light = String(analogRead(A0));
+ data = "light="+light;
+
+ //check if and connect the nodeMCU to the server
+ if(client.connect(host, httpPort)) {
+   //make the POST headers and add the data string to it
+   client.println("POST /esp/index.php HTTP/1.1");
+   client.println("Host: www.martijnnieuwenhuizen.nl:80");
+   client.println("Content-Type: application/x-www-form-urlencoded");
+   client.println("Connection: close");
+   client.print("Content-Length: ");
+   client.println(data.length());
+   client.println();
+   client.print(data);
+   client.println();
+   Serial.println(light);
+   Serial.println("Data send");
+
+   //print the response to the USB
+//    while(client.available()){
+//      String line = client.readStringUntil('\r');
+//      Serial.print(line);
+//    }
+ } else {
+   Serial.println("Something went wrong");
+ }
      
   // wait .5s to reloop this loop
   delay(500);
+  
 }
 
 // Set RGB Function

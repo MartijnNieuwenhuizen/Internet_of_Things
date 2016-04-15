@@ -1,16 +1,38 @@
+
+
+
+
+
+
+
+
+<?php
+header('Access-Control-Allow-Origin: *');
+?>
 <?php
 $light = $_GET['light'];
-if($light == "on") {
+if($light == "blue") {
   $file = fopen("light.json", "w") or die("can't open file");
-  fwrite($file, '{"light": "on"}');
+  fwrite($file, '{"light": "blue"}');
   fclose($file);
 } 
-else if ($light == "off") {
+else if ($light == "red") {
   $file = fopen("light.json", "w") or die("can't open file");
-  fwrite($file, '{"light": "off"}');
+  fwrite($file, '{"light": "red"}');
   fclose($file);
 }
+else if ($light == "green") {
+  $file = fopen("light.json", "w") or die("can't open file");
+  fwrite($file, '{"light": "green"}');
+  fclose($file);
+}
+
+
+
 ?>
+
+
+
 
 <html>
   <head>      
@@ -20,33 +42,124 @@ else if ($light == "off") {
     
     <title>LED for ESP8266</title>
    
-    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css">
 
   </head>
   <body>
-    <div class="row" style="margin-top: 20px;">
-      <div class="col-md-8 col-md-offset-2">
-        <a href="?light=on" class="btn btn-success btn-block btn-lg">Turn On</a>
-        <br />
-        <a href="?light=off" class="led btn btn-danger btn-block btn-lg">Turn Off</a>
-        <br />
-        <div class="light-status well" style="margin-top: 5px; text-align:center">
-          <?php
-            if($light=="on") {
-              echo("Turn LED on.");
-            }
-            else if ($light=="off") {
-              echo("Turn LED off.");
-            }
-            else {
-              echo ("Do something.");
-            }
-          ?>
-        </div>
-      </div>
-    </div>
+    <section>
+      <h2>Martijn</h2>
+      <a href="?light=red" class="">Turn red</a>
+      <a href="?light=green" class="">Turn green</a>
+      <a href="?light=blue" class="">Turn blue</a>
+    </section>
+
+    <section>
+      <h2>Dylan</h2>
+      <a href="http://dylanvens.com/iot/?light=on" class="d_on">Turn On</a>
+      <a href="http://dylanvens.com/iot/?light=off" class="d_off">Turn Off</a>
+    </section>
+
+    <section>
+      <h2>Raymond</h2>
+      <a href="http://raymondkorrel.nl/iot/index.php?light=on" class="r_on">Turn On</a>
+      <a href="http://raymondkorrel.nl/iot/index.php?light=off" class="r_off">Turn Off</a>
+    </section>
+      
+
+      <?php 
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+      // Waarde wegschrijven naar bestand
+      $data = $_POST["light"];
+
+      // Push data to text file
+      file_put_contents("output.txt", $data . "\n", FILE_APPEND);
+
+    } else  {
+        // Open the file
+        $fp = @fopen('output.txt', 'r');
+
+        // Add each line to an array
+        if ($fp) {
+           $array = explode("\n", fread($fp, filesize('output.txt')));
+        }
+
+        foreach ($array as $value) {
+            ?> <p class="bar"> <?php echo $value; ?></p> <?php
+        };
+    }
+?>
+        
   </body>
+  <script>
+    (function(){
+
+    'use strict';
+
+    function Loader() {
+
+        var _this = this;
+
+        _this.load = function(method, url, data, contentType) {
+
+            return new Promise(function(resolve, reject) {
+
+                var xhr = new XMLHttpRequest();
+                xhr.open(method, url, true);
+
+                xhr.onload = function() {
+
+                    if (this.status >= 200 && this.status < 300) {
+                        
+                        resolve(JSON.parse(xhr.response));
+                    
+                    } else {
+                        
+                        var error = {
+                            status: this.status,
+                            message: xhr.statusText
+                        };
+
+                        reject(error);    
+                    }
+
+                }    
+
+                xhr.send();
+            
+            });
+
+        }
+
+    }
+
+    window.Loader = Loader;
+
+}());
+  </script>
+  <script>
+    var dOn = document.querySelector('.d_on');
+    var dOff = document.querySelector('.d_off');
+    var rOn = document.querySelector('.r_on');
+    var rOff = document.querySelector('.r_off');
+
+    
+    function changeState(e) {
+      e.preventDefault();
+      var _url = e.target.href;
+
+      var _buttonLoader = new Loader();
+
+      _buttonLoader.load('GET', _url);
+
+    }
+
+    dOn.addEventListener('click', changeState, true);
+    dOff.addEventListener('click', changeState, true);
+    rOn.addEventListener('click', changeState, true);
+    rOff.addEventListener('click', changeState, true);
+
+
+
+  </script>
+
 </html>
