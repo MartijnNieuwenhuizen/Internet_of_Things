@@ -1,0 +1,32 @@
+# IoT - Week 3
+
+Schrijf er bronvermelding bij
+
+## Eindopdracht in Week 3
+Meet biologische activiteit, geef de data weer over tijd via een browser.
+Kan history opslaan
+
+Als er teveel activiteit is op een te laat tijdstip, trigger iets.
+
+Output stand: (stoplicht)
+Goed,
+Bijna teveel/ te weinig
+Nu aanpassen
+
+Niveau vanaf browser kunnen regellen
+
+Triggers ook beschikbaar op de website
+
+Maak bruikbare UI (Mooiii)
+
+Moet binnen de Minuut syncen
+
+Moet Probleem Oplossen!
+
+
+
+
+# Onderzoek
+Zondag 24 April, voor 23:59
+
+Je kunt Compenseren, richt je op de punten waar je kracht liggen

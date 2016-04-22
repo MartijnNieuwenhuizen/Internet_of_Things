@@ -12,6 +12,7 @@ char password[] = "wortels18"; // Network Password
 // Host + Path (needed for GET Connection)
 char* host = "www.martijnnieuwenhuizen.nl";
 String path = "/esp/light.json";
+
 const int httpPort = 80;
 
 // RGB Led Setup
