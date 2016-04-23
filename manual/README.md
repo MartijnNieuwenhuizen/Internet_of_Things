@@ -22,7 +22,18 @@ The feedback is given silently, so if you're working in a thing like a studio, i
 
 ## How it works
 ### What goes to what:
-This drawing explanes the global proces of this project.
+This drawing explanes the global proces of this project. 
+
+### POST and handle the button status
+
+The ESP for the button requests the button state every second. This will be pushed to the server with a POST Request. The server will check if it receifs a POST request. The button state will be written into the *history.json*, *output.txt* and the *data.json*. If you sit, so the button status is true, a script *redOne.php* will be called. After your set time, the code in this file will be run and *led.json* will be written to *ledState: one;*. And the script ledTwo.php will be called. This proces is repeted until *redThree.php*. If that script is called, the third led will be set to **RED** and you will need to move!
+
+### GET the led status and set the led's
+The ESP for the leds will do a GET request to your server. He will ask for the status of the led, writen in *led.json*. The code on the ESP will receife the led.json and wil read it. If the ledStatus is *false*, you don't sit and all the leds wil have a green color. If the ledStatus is *one*, you sit and the set time for the first led is over. This proces repeats itself for the comming two leds.
+
+The status of the leds are adustable in your browser (this update is comming next week).
+
+NOTE: If you uses one ESP, this ESP will handle both things.
 
 ![Global Setup](https://github.com/MartijnNieuwenhuizen/Internet_of_Things/blob/master/images/setup-drawing.jpg "What goes to what")
 
@@ -64,7 +75,7 @@ For this part you will need a bit of experiance with a FTP program. If you dont 
 
 1. Go to the root of your url with your ftp Program.
 2. Create a folder named 'get-up-stand-up'.
-3. Drag the files into the 'get-up-stand-up' folder.
+3. Drag the files from [server-code](https://github.com/MartijnNieuwenhuizen/Internet_of_Things/tree/master/manual/server-code) into the 'get-up-stand-up' folder.
 
 Go to: *your_own_url* /get-up-stand-up/index.php
 If you see the site, your done here.
