@@ -22,18 +22,26 @@ The feedback is given silently, so if you're working in a thing like a studio, i
 
 ## How it works
 ### What goes to what:
+This drawing explanes the global proces of this project.
+
 ![Global Setup](https://github.com/MartijnNieuwenhuizen/Internet_of_Things/blob/master/images/setup-drawing.jpg "What goes to what")
 
 ### The pins of a RGB LED
+A RGB LED has for pins. A pin for the ground (the largest) and a pin for each color (red - green - blue). In this picture you see how the arrangement is set. The longest pin is alway's the pin for the ground.
+
 ![RGB LED](https://github.com/MartijnNieuwenhuizen/Internet_of_Things/blob/master/images/rgb-led.jpg "RGB LED")
 
 ## Setup your board
 ### The Pressure sensor
+A pressure sensor needs a ground and a plus(vin) connection to work. You can read the data with a digital input, I used D7 in this manual.
+
 ![Button Setup](https://github.com/MartijnNieuwenhuizen/Internet_of_Things/blob/master/images/button-setup.jpg "Button Setup")
 
 ![button](https://github.com/MartijnNieuwenhuizen/Internet_of_Things/blob/master/images/button.jpg "button")
 
 ### The RGB Led's
+To set up the RGB LED's, you woun't need to connect the blue pin for this project. The ground is alway's connected with a resistor. The color pins go to a Digital port (D1 - D6) in this case. In the picute you will see white wires who connect the green pins, the orange and yellow wires connect the red pins. The drawing gives a better view of this setup.
+
 ![RGB LED](https://github.com/MartijnNieuwenhuizen/Internet_of_Things/blob/master/images/rgb-setup.jpg "RGB LED")
 
 ![leds-one](https://github.com/MartijnNieuwenhuizen/Internet_of_Things/blob/master/images/leds-one.jpg "leds-one")
