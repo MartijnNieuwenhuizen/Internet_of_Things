@@ -24,26 +24,49 @@ The feedback is given silently, so if you're working in a thing like a studio, i
 ### What goes to what:
 ![Global Setup](https://github.com/MartijnNieuwenhuizen/Internet_of_Things/blob/master/images/setup-drawing.jpg "What goes to what")
 
-### How a RGB-LED woks
-![RGB LEd](https://github.com/MartijnNieuwenhuizen/Internet_of_Things/blob/master/images/rgb-led.jpg "RGB LEd")
+### The pins of a RGB LED
+![RGB LED](https://github.com/MartijnNieuwenhuizen/Internet_of_Things/blob/master/images/rgb-led.jpg "RGB LED")
 
 ## Setup your board
 ### The Pressure sensor
-![RGB LEd](https://github.com/MartijnNieuwenhuizen/Internet_of_Things/blob/master/images/button-setup.jpg "RGB LEd")
+![Button Setup](https://github.com/MartijnNieuwenhuizen/Internet_of_Things/blob/master/images/button-setup.jpg "Button Setup")
+
+![button](https://github.com/MartijnNieuwenhuizen/Internet_of_Things/blob/master/images/button.jpg "button")
 
 ### The RGB Led's
-![RGB LEd](https://github.com/MartijnNieuwenhuizen/Internet_of_Things/blob/master/images/rgb-setup.jpg "RGB LEd")
+![RGB LED](https://github.com/MartijnNieuwenhuizen/Internet_of_Things/blob/master/images/rgb-setup.jpg "RGB LED")
 
+![leds-one](https://github.com/MartijnNieuwenhuizen/Internet_of_Things/blob/master/images/leds-one.jpg "leds-one")
+
+![leds-two](https://github.com/MartijnNieuwenhuizen/Internet_of_Things/blob/master/images/leds-two.jpg "leds-two")
 
 ## Installing the software on your board
+For this Setup you could use one OR two ESP's. If you want to use one ESP, upload the code from the folder [code-one-esp]() to your ESP. If you would like to use two ESP's, which I recomand because one ESP will handle the input data from the pressure sensor and the other gives the feedback. This means that the feedback will be in your sight. Than use the code from the folder [code-two-esps](). Upload the button.ino to the ESP who handles the button and the rgb.ino the the ESP who handles the RGB LED feedback.
+
+NOTE: You will need te fill in a view things. 
+
+* Your routers name
+* Your routers password
+* Your site's url
+
+Don't share any passwords/usernames you have put in the fill on GitHub or with anyone else!
 
 ## Setup your server
+For this part you will need a bit of experiance with a FTP program. If you dont have that, ask a friend or Google your question (It ain't that hard.)
 
-## Test 
+1. Go to the root of your url with your ftp Program.
+2. Create a folder named 'get-up-stand-up'.
+3. Drag the files into the 'get-up-stand-up' folder.
+
+Go to: *your_own_url* /get-up-stand-up/index.php
+If you see the site, your done here.
+
 
 ## Use It
+If your site works and you've set the right data in the arduino code, your good to go. The ESP will transmit every 10sec or-something, so you will see data the minute if everyting is right.
 
 ## References
+For parts of the code I used [this tutorial](http://blog.nyl.io/esp8266-led-arduino/), thanks for sharing [Nancy Yi Liang](http://blog.nyl.io/author/nyl/)!
 
 ## Tips/Questions
-For tips or Questions you can add an issue or email me directly. If you can improve this manual/code, please make a Pull Request.
+For tips or Questions you can add create a GitHub issue. If you can improve this manual/code, please make a Pull Request. Thx and good luck.
