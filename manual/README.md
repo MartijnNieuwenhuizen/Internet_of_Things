@@ -49,7 +49,7 @@ To set up the RGB LED's, you woun't need to connect the blue pin for this projec
 ![leds-two](https://github.com/MartijnNieuwenhuizen/Internet_of_Things/blob/master/images/leds-two.jpg "leds-two")
 
 ## Installing the software on your board
-For this Setup you could use one OR two ESP's. If you want to use one ESP, upload the code from the folder [code-one-esp]() to your ESP. If you would like to use two ESP's, which I recomand because one ESP will handle the input data from the pressure sensor and the other gives the feedback. This means that the feedback will be in your sight. Than use the code from the folder [code-two-esps](). Upload the button.ino to the ESP who handles the button and the rgb.ino the the ESP who handles the RGB LED feedback.
+For this Setup you could use one OR two ESP's. If you want to use one ESP, upload the code from the folder [code-one-esp](https://github.com/MartijnNieuwenhuizen/Internet_of_Things/tree/master/manual/code-one-esp) to your ESP. If you would like to use two ESP's, which I recomand because one ESP will handle the input data from the pressure sensor and the other gives the feedback. This means that the feedback will be in your sight. Than use the code from the folder [code-two-esps](https://github.com/MartijnNieuwenhuizen/Internet_of_Things/tree/master/manual/code-two-esps). Upload the button.ino to the ESP who handles the button and the rgb.ino the the ESP who handles the RGB LED feedback.
 
 NOTE: You will need te fill in a view things. 
 
