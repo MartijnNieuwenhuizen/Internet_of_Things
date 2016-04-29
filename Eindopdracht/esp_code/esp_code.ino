@@ -1,11 +1,16 @@
+// ToDo:
+  // Post all data insead of singles.
+  // Get data from function by a return.
+  // Do function With Millis and not a Delay.
+
 // Libraries
 #include <ESP8266WiFi.h>
 #include <ArduinoJson.h>
 #include <ESP8266HTTPClient.h>
 
 // WiFi
-char ssid[] = "iPhone van Martijn";
-char password[] = "wortels18";
+char ssid[] = "SWEEX1337";
+char password[] = "billgatesrules";
 
 // URL
 String host = "http://api.leandervanbaekel.nl/esp/";
@@ -32,12 +37,17 @@ void setup() {
   pinMode(ldrSensor, INPUT);
 
   WiFi.begin(ssid, password);
+
+  while (WiFi.status() != WL_CONNECTED) {
+      delay(500);
+      Serial.print(".");
+   }
   
   Serial.begin(9600);
-
-  while (!Serial) {
-    ; // wait for serial port to connect. Needed for Leonardo only
-  }
+  
+//  while (!Serial) {
+//    ; // wait for serial port to connect. Needed for Leonardo only
+//  }
 
 }
 
@@ -50,15 +60,12 @@ void loop() {
   readLight();
 
   // Sound
-  int sound = readSound();
-  Serial.println(sound);
+  readSound();
+
+  // Put values in the POST
+  postRequest(pirValue, ldrValue, soundValue);
   
-  // ToDo:
-  // Post all data insead of singles.
-  // Get data from function by a return.
-  // Do function With Millis and not a Delay.
-  
-  delay(2000);
+  delay(10000);
   
 }
 
@@ -67,9 +74,7 @@ void loop() {
 void readLight() {
 
   ldrValue = analogRead(ldrSensor);
-  Serial.println(ldrValue);
-
-//  postRequest(ldrValue);
+//  Serial.println(ldrValue);
   
 }
 
@@ -79,38 +84,43 @@ void readmotion() {
 
   if ( pirState == HIGH ) {
 
-    Serial.println("Motion!");
+//    Serial.println("Motion!");
     pirValue = 1;
 
   } else {
 
-    Serial.println("No Motion!");
+//    Serial.println("No Motion!");
     pirValue = 0;
     
   }
-
-//  postRequest(pirValue);
   
 }
 
 void readSound() {
+  if ( Serial.read() == -1) {
+    soundValue = 0;
+  } else {
+    soundValue = Serial.read();  
+  }
   
-  soundValue = Serial.read();
+  
+  Serial.println("Sound");
   Serial.println(soundValue);
-
-  return soundValue;
   
 }
 
-void postRequest(int value) {
- 
- // By Sem
+void postRequest(int pirPost, int ldrPost, int soundPost) {
+
+  String sendData = "esp2/" + String(pirPost) + "/" + String(ldrPost) + "/" + String(soundPost);
+  http.begin(host + sendData);
+
   Serial.println("In The POST");
-  Serial.println(value);
-  http.begin(host);
+  Serial.println(sendData);
+  
+  
   http.addHeader("Content-Type", "application/x-www-form-urlencoded");
 
-  String sendData = "value=" + String(value);
+  
 
   int httpCode = http.POST(sendData);
 
