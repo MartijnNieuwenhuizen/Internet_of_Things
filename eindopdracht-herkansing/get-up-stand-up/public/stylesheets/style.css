@@ -1,0 +1,45 @@
+/*
+	Colors
+	#F8AA27
+	#FAC55B
+	#FFF8B6
+	#20655F
+*/
+
+body {
+	font-family: "Fira Sans", sans-serif;
+	line-height: 1.7;
+	padding: 0;
+	margin: 0;
+}
+
+/*
+	Header
+*/
+header {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-between;
+	align-items: center;
+	padding: .3em 2em;
+	background-color: #F8AA27;
+	color: #FFF8B6;
+}
+main {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-between;
+	align-items: flex-start;
+}
+
+/*
+	History
+*/
+
+/*
+	Message
+*/
+
+/*
+	Settings
+*/

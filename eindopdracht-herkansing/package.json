@@ -1,0 +1,14 @@
+{
+  "name": "eindopdracht-herkansing",
+  "version": "1.0.0",
+  "description": "eindopdracht herkansing",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Martijn Nieuwenhuizen",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.13.4"
+  }
+}

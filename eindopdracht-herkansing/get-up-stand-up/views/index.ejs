@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css'>
+    <link href='https://fonts.googleapis.com/css?family=Fira+Sans:400,500,300' rel='stylesheet' type='text/css'>
+  </head>
+  <body>
+  	<header>
+  		<h1><%= title %></h1>
+  		<form action="" class="on-off">
+  			<label for="switch">On/Off</label>
+  			<input type="checkbox" id="switch">
+  		</form>
+  	</header>
+    
+	<main>
+		<section class="message">
+			<p>You've been working for <span class="working-minutes">0</span> minutes now</p>
+		</section>
+
+		<section class="history">
+			<div><span>Historybar!</span></div>
+		</section>
+
+    <aside class="settings">
+      <form action="">
+        <legend>Settings</legend>
+        <fieldset>
+          <label for="duration">Set your interval time</label>
+          <input type="number" id="duration">
+        </fieldset>
+      </form>
+    </aside>
+
+	</main>
+  </body>
+</html>
