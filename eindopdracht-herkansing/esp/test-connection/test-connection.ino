@@ -27,13 +27,13 @@ void setup() {
 
 void loop() {
 
-  data = "Test";
+  data = "sitting";
 
   // Thx Casper for this bit of code,
   // and the helping hand to setup the server!
   if (server.connect(ip, 3000)) { // Run if you're connected to your server
     server.println("POST / HTTP/1.1");
-    server.println("Host: 172.20.10.4:8000");
+    server.println("Host: 172.20.10.4:3000");
     server.println("Content-Type: application/x-www-form-urlencoded");
     server.println("Connection: close");
     server.print("Content-Length: ");
@@ -47,5 +47,5 @@ void loop() {
   }
   
   // wait .5s to reloop this loop
-  delay(500);
+  delay(4000);
 }
