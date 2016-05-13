@@ -30,8 +30,10 @@ router.get('/', function(req, res, next) {
 	  	// Get Data
 	  	historyData = JSON.parse(data);
 
+	  	var diff = 90; // need to read a json file!
+
 	  	// Render Template
-	  	res.render('index', { title: 'Get-up Stand-up' });
+	  	res.render('index', { title: 'Get-up Stand-up', test: "testO" });
 
 	});
 

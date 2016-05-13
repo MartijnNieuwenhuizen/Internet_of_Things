@@ -5,6 +5,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var fs = require('file-system');
+var timeout = require('connect-timeout');
+var router = express.Router();
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -26,6 +28,42 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/users', users);
 
+// function sittingTimer(diff) {
+//   var stateOne = (diff * 100) / 3;
+//   var stateTwo = stateOne * 2;
+//   var stateThree = (diff * 100);
+
+//   var ESPPath = "./public/data/ledState.json";
+//   function writeFile(filename, data) {
+//     fs.writeFile(filename, data);
+//   }
+
+//   // app.use(timeout(120000));
+//   // app.use(haltOnTimedout);
+
+//   function haltOnTimedout(req, res, next){
+//     if (!req.timedout) next();
+//   }
+
+//   // var espData = '{"ledState":"one"}';
+//   // writeFile(ESPPath, espData);
+
+//   setTimeout(function() {
+//     var espData = '{"ledState":"one"}';
+//     writeFile(ESPPath, espData);
+//   }, 5000);
+
+//   setTimeout(function() {
+//     var espData = '{"ledState":"two"}';
+//     writeFile(ESPPath, espData);
+//   }, 10000);
+
+//   setTimeout(function() {
+//     var espData = '{"ledState":"three"}';
+//     writeFile(ESPPath, espData);
+//   }, 20000);
+// }
+
 // React a post on the "/"
 app.post('/', function (req, res) {
 
@@ -36,6 +74,7 @@ app.post('/', function (req, res) {
   // var postData = "standing"; // data from the ESP
   var statusPath = "./public/data/ledStatus.json"; // path to the ledStatus.json
   var historyPath = "./public/data/history.json"; // path to the history.json
+  var ESPPath = "./public/data/ledState.json";
 
   // function to read a file
   function readFile(filename, callback) {
@@ -71,8 +110,11 @@ app.post('/', function (req, res) {
     // Get the data
     statusData = JSON.parse(gotStatusData);
     if ( postData == statusData[0].status ) {
+
       // Don't know if shomething needs to happen!
-      console.log(statusData);
+      // Let the loop of the Led run! --> But only Once!!!!
+
+
     } else {
 
       readFile(historyPath, function (err, gotHistoryData) {
@@ -80,14 +122,22 @@ app.post('/', function (req, res) {
           console.log(err); 
         }
         historyData = JSON.parse(gotHistoryData);
+
+        var oldTime = statusData[0].dataCalc;
+        var newTime = Date.parse(d);
+        var diff = 90;
+
         var newInsert = {
           status: postData,
           time: timeNow,
-          date: dateNow
+          date: dateNow,
+          dataCalc: newTime,
+          duration: true
         }
-        console.log(historyData.length);
+        if ( (newTime - oldTime) > diff ) { // needs to be custom set!
+          newInsert.duration = false;
+        }
         historyData.push(newInsert);
-        console.log(historyData.length);
       
         statusData[0].status = postData;
         statusData[0].time = timeNow;
@@ -99,6 +149,18 @@ app.post('/', function (req, res) {
 
         var writeHistoryData = JSON.stringify(historyData);
         writeFile(historyPath, writeHistoryData);
+
+        if ( postData == "sitting" ) {
+
+          var espData = '{"ledState":"blink"}';
+          writeFile(ESPPath, espData);
+
+          // app.use('/', routes);
+        
+        } else {
+          var espData = '{"ledState":"false"}';
+          writeFile(ESPPath, espData);
+        }
 
       });
 

@@ -2,17 +2,18 @@
 #include <ESP8266WiFi.h>
 
 // WiFi Settings
-//char ssid[] = "iPhone van Martijn";
-//char password[] = "wortels18";
-char ssid[] = "iPhone van Martijn"; //  Network Name
-char password[] = "wortels18"; // Network Password
+char ssid[] = "FRITZ!Box Fon WLAN 7340";
+char password[] = "3608432098104837";
 
 // Init
+int buttonPin = D7; 
+int buttonState = 0;         // current state of the button
+
 String data;
 
 // Setup Wifi Client + Ip
 WiFiClient server;
-IPAddress ip(172,20,10,4);
+IPAddress ip(192,168,178,114);
 
 void setup() {  
   Serial.begin(9600);
@@ -27,13 +28,26 @@ void setup() {
 
 void loop() {
 
-  data = "sitting";
+  pinMode(buttonPin, INPUT);
+  
+  // wait .5s to reloop this loop
+  delay(4000);
+}
+
+void postRequest() {
+
+  buttonState = digitalRead(buttonPin);
+  if (buttonState == HIGH) {
+    data = "sitting";
+  } else {
+    data = "standing";
+  }
 
   // Thx Casper for this bit of code,
   // and the helping hand to setup the server!
   if (server.connect(ip, 3000)) { // Run if you're connected to your server
     server.println("POST / HTTP/1.1");
-    server.println("Host: 172.20.10.4:3000");
+    server.println("Host: 192.168.178.114:3000");
     server.println("Content-Type: application/x-www-form-urlencoded");
     server.println("Connection: close");
     server.print("Content-Length: ");
@@ -46,6 +60,27 @@ void loop() {
     Serial.println("Not Connected");
   }
   
-  // wait .5s to reloop this loop
-  delay(4000);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

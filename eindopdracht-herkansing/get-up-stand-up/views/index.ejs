@@ -8,6 +8,7 @@
   <body>
   	<header>
   		<h1><%= title %></h1>
+      <h2><%= test %></h2>
   		<form action="" class="on-off">
   			<label for="switch">On/Off</label>
   			<input type="checkbox" id="switch">
@@ -24,11 +25,12 @@
 		</section>
 
     <aside class="settings">
-      <form action="">
+      <form action="172.20.10.4:3000/setTime/" type="POST">
         <legend>Settings</legend>
         <fieldset>
           <label for="duration">Set your interval time</label>
-          <input type="number" id="duration">
+          <input type="number" id="duration" value="90">
+          <input type="submit" name="Set" value="Set">
         </fieldset>
       </form>
     </aside>

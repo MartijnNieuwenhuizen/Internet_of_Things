@@ -39,7 +39,15 @@ main {
 /*
 	Message
 */
+.message {
+	max-width: 10em;
+	box-sizing: border-box;
+	padding: 1em;
+}
 
 /*
 	Settings
 */
+.settings {
+	max-width: 10em;
+}
