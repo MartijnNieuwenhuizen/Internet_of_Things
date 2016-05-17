@@ -2,17 +2,11 @@
 #include <ESP8266WiFi.h>
 #include <ArduinoJson.h>
 
-// WiFi
-char ssid[] = "routers_name"; // set the routers name here
-char password[] = "routers_password"; // set the routers password here
+// WiFi Settings
+char ssid[] = "Router Name";
+char password[] = "Router Password";
 
-char* host = "www.your_url.nl"; // set your own url here
-String path = "/get-up-stand-up/led.json";
-const int httpPort = 80;
-
-WiFiClient client;
-
-// init
+// Init
 int oneGreen = D1;
 int oneRed = D2;
 int twoGreen = D3;
@@ -20,7 +14,12 @@ int twoRed = D4;
 int threeGreen = D5;
 int threeRed = D6;
 
-void setup() {
+// Setup Wifi Client + Ip
+WiFiClient server;
+IPAddress ip(xxx,xxx,xxx,xxx); // Your IP adress
+
+void setup() {  
+  
   pinMode(oneGreen, OUTPUT);
   pinMode(oneRed, OUTPUT);
   pinMode(twoGreen, OUTPUT);
@@ -33,59 +32,31 @@ void setup() {
   // Connect to WiFi
   WiFi.begin(ssid, password);
 
+  // Confirm Wifi Connection
+  Serial.println("WiFi connected");  
 }
 
 void loop() {
   
   getRequest();
-     
-  delay(500);
-}
-
-void setOne(int green, int red) {
-    red = 255 - red;
-    green = 255 - green;
-    analogWrite(oneGreen, green);
-    analogWrite(oneRed, red);
-}
-void setTwo(int green, int red) {
-    red = 255 - red;
-    green = 255 - green;
-    analogWrite(twoGreen, green);
-    analogWrite(twoRed, red);
-}
-void setThree(int green, int red) {
-    red = 255 - red;
-    green = 255 - green;
-    analogWrite(threeGreen, green);
-    analogWrite(threeRed, red);
-}
-
-// Code From http://blog.nyl.io/esp8266-led-arduino/
-void getRequest() {
-  // Log the connection
-  Serial.print("connecting to ");
-  Serial.println(host);
-
-  // set WiFi Client
-  WiFiClient client;
-
-  // check connection
-  if (!client.connect(host, httpPort)) {
-    Serial.println("connection failed");
-    return; 
-  }
-  client.print(String("GET ") + path + " HTTP/1.1\r\n" +
-   "Host: " + host + "\r\n" + 
-   "Connection: keep-alive\r\n\r\n");             
-               
-  delay(500);
   
-  // read response
+  delay(2000);
+}
+
+void getRequest() {
+
+  if (server.connect(ip, 3000)) { // Run if you're connected to your server
+    server.print(String("GET ") + "/path/to/your.json" + " HTTP/1.1\r\n" +
+   "Host: " + "xxx.xxx.xxx.xxx:3000" + "\r\n" + // ip adress
+   "Connection: keep-alive\r\n\r\n"); 
+
+   delay(500);
+
+    // read response
   String section="header";
-  while(client.available()){
+  while(server.available()){
     
-    String line = client.readStringUntil('\r');
+    String line = server.readStringUntil('\r');
     // we’ll parse the HTML body here
     if (section=="header") { // headers..
       Serial.print(".");
@@ -130,10 +101,60 @@ void getRequest() {
         setOne(0, 255);
         setTwo(0, 255);
         setThree(0, 255);
+      } else  if ( strcmp(json_parsed["ledState"], "off") == 0 ) {
+        Serial.println("json = off");
+        
+        setOne(120, 120);
+        setTwo(120, 120);
+        setThree(120, 120);
+
+      } else  if ( strcmp(json_parsed["ledState"], "blink") == 0 ) {
+        Serial.println("json = blink");
+        
+        setOne(0, 255);
+        setTwo(0, 255);
+        setThree(0, 255);
+        
+        delay(500);
+
+        setOne(255, 0);
+        setTwo(255, 0);
+        setThree(255, 0);
+
+        delay(200);
+        
+        setOne(0, 255);
+        setTwo(0, 255);
+        setThree(0, 255);
+        
       } else {
         Serial.println("json = ERROR??");
       }
     }
     
   }
+   
+  } else {
+    Serial.println("Not Connected");
+  }
+  
+}
+
+void setOne(int green, int red) {
+    red = 255 - red;
+    green = 255 - green;
+    analogWrite(oneGreen, green);
+    analogWrite(oneRed, red);
+}
+void setTwo(int green, int red) {
+    red = 255 - red;
+    green = 255 - green;
+    analogWrite(twoGreen, green);
+    analogWrite(twoRed, red);
+}
+void setThree(int green, int red) {
+    red = 255 - red;
+    green = 255 - green;
+    analogWrite(threeGreen, green);
+    analogWrite(threeRed, red);
 }

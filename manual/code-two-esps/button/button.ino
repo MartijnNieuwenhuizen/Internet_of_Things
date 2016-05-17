@@ -2,27 +2,23 @@
 #include <ESP8266WiFi.h>
 #include <ArduinoJson.h>
 
-// WiFi
-char ssid[] = "routers_name"; // set the routers name here
-char password[] = "routers_password"; // set the routers password here
+// WiFi Settings
+char ssid[] = "Router Name";
+char password[] = "Router Password";
 
-char* host = "www.your_url.nl"; // set your own url here
-String path = "/get-up-stand-up/led.json";
-const int httpPort = 80;
-
-WiFiClient client;
-
-// init
+// Init
 int buttonPin = D7; 
-int buttonPushCounter = 0;   // counter for the number of button presses
-int buttonState = 0;         // current state of the button
-int lastButtonState = 0;     // previous state of the button
 
 String data;
-String buttonValue;
+String ledStatus;
+int buttonState = 0;
 
-void setup() {
+// Setup Wifi Client + Ip
+WiFiClient server;
+IPAddress ip(xxx,xxx,xxx,xxx); // Your IP adress
 
+void setup() {  
+  
   pinMode(buttonPin, INPUT);
   
   Serial.begin(9600);
@@ -30,49 +26,43 @@ void setup() {
   // Connect to WiFi
   WiFi.begin(ssid, password);
 
+  // Confirm Wifi Connection
+  Serial.println("WiFi connected");  
 }
 
 void loop() {
 
   postRequest();
-     
-  delay(500);
+ 
+  delay(2000);
 }
+
 
 void postRequest() {
 
-      buttonState = digitalRead(buttonPin);
-      if (buttonState == HIGH) {
-        buttonValue = "true";
-      } else {
-        buttonValue = "false";
-      }
-      data = "sitting="+buttonValue;
+  buttonState = digitalRead(buttonPin);
+  if (buttonState == HIGH) {
+    data = "sitting";
+  } else {
+    data = "standing";
+  }
 
-    if(client.connect(host, httpPort)) {
-      
-      // Code From Casper Boutens
-      // make the POST headers and add the data string to it
-      client.println("POST /get-up-stand-up/index.php HTTP/1.1");
-      client.println("Host: www.your_url.nl:80"); // FILL IN YOU URL!!!!!!!!!!!
-      client.println("Content-Type: application/x-www-form-urlencoded");
-      client.println("Connection: close");
-      client.print("Content-Length: ");
-      client.println(data.length());
-      client.println();
-      client.print(data);
-      client.println();
-      Serial.println(data);
-      Serial.println("Data send");
- 
-//    Uncommend this code to dubug your POST Request
-//    while(client.available()){
-//      String line = client.readStringUntil('\r');
-//      Serial.print(line);
-//    }
-
-   } else {
-      Serial.println("Something went wrong");
-   }
-    
+  // Thx Casper for this bit of code,
+  // and the helping hand to setup the server!
+  if (server.connect(ip, 3000)) { // Run if you're connected to your server
+    server.println("POST / HTTP/1.1");
+    server.println("Host: xxx.xxx.xxx.xxx:3000"); // your ip adress
+    server.println("Content-Type: application/x-www-form-urlencoded");
+    server.println("Connection: close");
+    server.print("Content-Length: ");
+    server.println(data.length());
+    server.println();
+    server.print(data);
+    server.println();
+    Serial.println("Data send: ");
+    Serial.println(data);
+  } else {
+    Serial.println("Not Connected");
+  }
+  
 }
