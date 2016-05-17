@@ -110,8 +110,16 @@ void getRequest() {
         setOne(0, 255);
         setTwo(0, 255);
         setThree(0, 255);
+      } else  if ( strcmp(json_parsed["ledState"], "off") == 0 ) {
+        Serial.println("json = off");
+        
+        setOne(120, 120);
+        setTwo(120, 120);
+        setThree(120, 120);
+
       } else  if ( strcmp(json_parsed["ledState"], "blink") == 0 ) {
         Serial.println("json = blink");
+        
         setOne(0, 255);
         setTwo(0, 255);
         setThree(0, 255);

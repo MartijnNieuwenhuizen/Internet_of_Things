@@ -27,42 +27,72 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/users', routes);
 
-// function sittingTimer(diff) {
-//   var stateOne = (diff * 100) / 3;
-//   var stateTwo = stateOne * 2;
-//   var stateThree = (diff * 100);
+// The post requests for the Led States
+var ESPPath = "./public/data/ledState.json";
+var settingPath = "./public/data/setting.json";
+var togglePath = "./public/data/toggle.json";
 
-//   var ESPPath = "./public/data/ledState.json";
-//   function writeFile(filename, data) {
-//     fs.writeFile(filename, data);
-//   }
+function writeFile(filename, data) {
+  fs.writeFile(filename, data);
+}
+app.post('/active', function(req, res) {
+  
+  var espData = '{"ledState":"false"}';
+  writeFile(ESPPath, espData);
 
-//   // app.use(timeout(120000));
-//   // app.use(haltOnTimedout);
+});
+app.post('/stateOne', function(req, res) {
+  
+  var espData = '{"ledState":"one"}';
+  writeFile(ESPPath, espData);
 
-//   function haltOnTimedout(req, res, next){
-//     if (!req.timedout) next();
-//   }
+});
+app.post('/stateTwo', function(req, res) {
+  
+  var espData = '{"ledState":"two"}';
+  writeFile(ESPPath, espData);
 
-//   // var espData = '{"ledState":"one"}';
-//   // writeFile(ESPPath, espData);
+});
+app.post('/stateThree', function(req, res) {
+  
+  var espData = '{"ledState":"three"}';
+  writeFile(ESPPath, espData);
 
-//   setTimeout(function() {
-//     var espData = '{"ledState":"one"}';
-//     writeFile(ESPPath, espData);
-//   }, 5000);
+});
 
-//   setTimeout(function() {
-//     var espData = '{"ledState":"two"}';
-//     writeFile(ESPPath, espData);
-//   }, 10000);
+app.post('/on', function(req, res) {
+  
+  var toggle = '{"status":"on"}';
+  writeFile(togglePath, toggle);
 
-//   setTimeout(function() {
-//     var espData = '{"ledState":"three"}';
-//     writeFile(ESPPath, espData);
-//   }, 20000);
-// }
+  var espData = '{"ledState":"false"}';
+  writeFile(ESPPath, espData);
+
+});
+app.post('/off', function(req, res) {
+  
+  var toggle = '{"status":"off"}';
+  writeFile(togglePath, toggle);
+
+  var espData = '{"ledState":"off"}';
+  writeFile(ESPPath, espData);
+
+});
+
+// POST request for the user settings
+app.post('/setting', function(req, res) {
+  
+  var receivedData = req._parsedUrl.query;
+  var amount = receivedData.slice(receivedData.indexOf("=")+1, receivedData.length);
+  var sendData = {
+    "setting": amount
+  }
+
+  writeFile(settingPath, JSON.stringify(sendData));
+
+});
 
 // React a post on the "/"
 app.post('/', function (req, res) {
@@ -74,7 +104,8 @@ app.post('/', function (req, res) {
   // var postData = "standing"; // data from the ESP
   var statusPath = "./public/data/ledStatus.json"; // path to the ledStatus.json
   var historyPath = "./public/data/history.json"; // path to the history.json
-  var ESPPath = "./public/data/ledState.json";
+  var ESPPath = "./public/data/ledState.json"; // path to the ledState (false, blink, ledOne, ledTwo, ledThree)
+  var settingPath = "./public/data/setting.json"; // path to the set user setting (default is 90)
 
   // function to read a file
   function readFile(filename, callback) {
@@ -125,42 +156,59 @@ app.post('/', function (req, res) {
 
         var oldTime = statusData[0].dataCalc;
         var newTime = Date.parse(d);
-        var diff = 90;
 
-        var newInsert = {
-          status: postData,
-          time: timeNow,
-          date: dateNow,
-          dataCalc: newTime,
-          duration: true
-        }
-        if ( (newTime - oldTime) > diff ) { // needs to be custom set!
-          newInsert.duration = false;
-        }
-        historyData.push(newInsert);
-      
-        statusData[0].status = postData;
-        statusData[0].time = timeNow;
-        statusData[0].date = dateNow;
+        // Calculate the time between the change in minutes
+        var newHour = timeNow.slice(0, 2);
+        var newMin = timeNow.slice(3, 5);
+        var oldHour = statusData[0].time.slice(0, 2);
+        var oldMin = statusData[0].time.slice(3, 5);
+        var differanceInMin = ((newHour - oldHour) * 60) + (newMin - oldMin);
 
-        // Write the new data
-        var writeStatusData = JSON.stringify(statusData);
-        writeFile(statusPath, writeStatusData);
+        // check if the time you worked was longer than the maximum time, set by the user
+        readFile(settingPath, function (err, setting) {
+          if (err) { 
+            console.log(err); 
+          }
+          
+          var userDiff = JSON.parse(setting);
+          var durToLong = false;
 
-        var writeHistoryData = JSON.stringify(historyData);
-        writeFile(historyPath, writeHistoryData);
+          if ( differanceInMin > setting.setting ) {
+            durToLong = true;
+          }
 
-        if ( postData == "sitting" ) {
+          var newInsert = {
+            status: postData,
+            time: timeNow,
+            date: dateNow,
+            duration: differanceInMin,
+            toLong: durToLong
+          }
 
-          var espData = '{"ledState":"blink"}';
-          writeFile(ESPPath, espData);
+          historyData.push(newInsert);
+          
+          statusData[0].status = postData;
+          statusData[0].time = timeNow;
+          statusData[0].date = dateNow;
 
-          // app.use('/', routes);
-        
-        } else {
-          var espData = '{"ledState":"false"}';
-          writeFile(ESPPath, espData);
-        }
+          // Write the new data
+          var writeStatusData = JSON.stringify(statusData);
+          writeFile(statusPath, writeStatusData);
+
+          var writeHistoryData = JSON.stringify(historyData);
+          writeFile(historyPath, writeHistoryData);
+
+          if ( postData == "sitting" ) {
+
+            var espData = '{"ledState":"blink"}';
+            writeFile(ESPPath, espData);
+          
+          } else {
+            var espData = '{"ledState":"false"}';
+            writeFile(ESPPath, espData);
+          }
+
+        });
 
       });
 

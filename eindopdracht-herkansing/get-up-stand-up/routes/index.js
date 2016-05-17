@@ -20,22 +20,19 @@ function readFile(filename, callback) {
 router.get('/', function(req, res, next) {
 
 	var historyData;
-	var filePath = "public/data/history.json";
+	var historyFilePath = "public/data/history.json";
 
-	readFile(filePath, function (err, data) {
-	  	if (err) { 
-	  		console.log(err); 
-	  	}
+  	readFile(historyFilePath, function (err, data) {
+  	  	if (err) { console.log(err); }
 
-	  	// Get Data
-	  	historyData = JSON.parse(data);
+  	  	historyData = JSON.parse(data);
 
-	  	var diff = 90; // need to read a json file!
+  	  	res.render('index', {
+  	  		title: 'Get-up Stand-up',
+  	  		history: historyData
+  	  	});
 
-	  	// Render Template
-	  	res.render('index', { title: 'Get-up Stand-up', test: "testO" });
-
-	});
+  	});
 
 });
 
