@@ -71,21 +71,18 @@ NOTE: You will need te fill in a view things.
 Don't share any passwords/usernames you have put in the fill on GitHub or with anyone else!
 
 ## Setup your server
-For this part, you will need a bit of experience with an FTP program. If you don't have that, ask a friend or Google your question (It ain't that hard.)
+The server is a Node.js server who runs Express. This means you need to have Node.js installed on your computer. If you don't have Node.js installed on your computer check the [Node.js site](https://nodejs.org/en/) for more info.
+If you have Node.js download the [server-code](https://github.com/MartijnNieuwenhuizen/Internet_of_Things/tree/master/manual/server-code) file to your mac and open it in your terminal. If it's opened, run the command ```$ npm install```. After All the packages are installed, run ```$ nodemon start```. This will run your server and restart it automatically after an error. 
 
-1. Go to the root of your URL with your FTP Program.
-2. Create a folder named 'get-up-stand-up'.
-3. Drag the files from [server-code](https://github.com/MartijnNieuwenhuizen/Internet_of_Things/tree/master/manual/server-code) into the 'get-up-stand-up' folder.
+If you go to [http://localhost:3000/](http://localhost:3000/), you will see the project running and you are ready to use it.
 
-Go to: *your_own_url* /get-up-stand-up/index.php
-If you see the site, your done here.
+## Usage
+The ESP will push and pull its data every 3 seconds. If the server receives data, if will automatically run the matching action and probably return or change a file. 
 
-
-## Use It
-If your site works and you've set the right data in the Arduino code, your good to go. The ESP will transmit every 10sec or something, so you will see data the minute if everything is right.
+The site checks every 5 seconds if the data has been changed since the last check. If it's changed, the code will be updated automatically.
 
 ## References
-For parts of the code I used [this tutorial](http://blog.nyl.io/esp8266-led-arduino/), thanks for sharing [Nancy Yi Liang](http://blog.nyl.io/author/nyl/)!
+To create the Pull request on the ESP, I've used [this tutorial](http://blog.nyl.io/esp8266-led-arduino/), thanks for sharing [Nancy Yi Liang](http://blog.nyl.io/author/nyl/)!
 
 ## Tips/Questions
 For tips or Questions, you can add create a GitHub issue. If you can improve this manual/code, please make a Pull Request. Thx and good luck.

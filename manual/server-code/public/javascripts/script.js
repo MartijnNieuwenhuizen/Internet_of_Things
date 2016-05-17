@@ -26,7 +26,7 @@ function postCall(url) {
 
 }
 
-var siteUrl = "localhost:3000";
+var siteUrl = "localhost:3000"; // change if you run on another host
 
 var ledStatePath = 'http://' + siteUrl + '/data/ledState.json';
 var historyPath = 'http://' + siteUrl + '/data/history.json';

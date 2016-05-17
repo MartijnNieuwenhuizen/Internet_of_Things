@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css'>
+    <link href='https://fonts.googleapis.com/css?family=Fira+Sans:400,500,300' rel='stylesheet' type='text/css'>
+  </head>
+  <body>
+  	<header>
+  		<form action="" class="on-off">
+        <input type="checkbox" id="switch" checked>
+  			<label for="switch">Application <span class="status">on</span></label>
+  		</form>
+
+      <h1><%= title %></h1>
+      
+      <button>Settings</button>
+      <div class="settings">
+        <form action="172.20.10.4:3000/setTime/" type="POST">
+            <label for="duration">How many minutes do you want to work?</label>
+            <input type="number" id="duration" value="90">
+            <input type="submit" name="Set" value="Set">
+        </form>
+      </div>
+  	</header>
+    
+	<main>
+		<section class="message">
+			<p>You are <span class="workingStatus">Working</span> and have been for <span class="working-minutes">0</span> minutes now!</p>
+		</section>
+
+    <section class="history" id="history">
+      <div id="historyg"></div>
+    </section>
+	</main>
+    
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="/javascripts/script.js"></script>
+  </body>
+</html>
