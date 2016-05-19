@@ -49,7 +49,7 @@ Now you can send your data thru the serial connection. Here's the setup we are u
 
 **Arduino Code (send the data)**
 
-```
+```c
 int soundInput = A2;
 
 void setup() {
@@ -76,7 +76,7 @@ void loop() {
 
 **NodeMCU Code (reciefe the data)**
 
-```
+```c
 int soundValue;
 
 void loop() {
@@ -89,7 +89,7 @@ After receiving this data, and the data from the other sensors, this needs to be
 
 This is the function used in the code in this project
 
-```
+```c
 String host = "http:your_own_url.com";
 const int httpPort = 80; // this is the standard value
 HTTPClient http; // open your http client
