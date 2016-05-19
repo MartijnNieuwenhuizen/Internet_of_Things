@@ -88,13 +88,13 @@ function getState() {
 
 		} else if ( data.ledState == "one" || data.ledState == "two" || data.ledState == "three" ) {
 			document.querySelector('.workingStatus').innerHTML = "working";
-			document.querySelector('.working-minutes').innerHTML = "?";
+			document.querySelector('.working-minutes').innerHTML = "0";
 			document.querySelector('.message').classList.add('work');
 			document.querySelector('.message').classList.remove('chill');
 		} else {
 			clearInterval(counter);
 			checker = false;
-			document.querySelector('.working-minutes').innerHTML = "?";
+			document.querySelector('.working-minutes').innerHTML = "0";
 			document.querySelector('.workingStatus').innerHTML = "pausing";
 			document.querySelector('.message').classList.add('chill');
 			document.querySelector('.message').classList.remove('work');
@@ -170,7 +170,7 @@ function pushUserSettings(e) {
 	// get the amount filed in by the user
 	var amount = document.querySelector('input[type=number]').value;
 	// create the url with amount as query
-	var url = "http://" siteUrl "/setting" + "?amount=" + amount;
+	var url = "http://" + siteUrl + "/setting" + "?amount=" + amount;
 	// make the call
 	postCall(url);
 

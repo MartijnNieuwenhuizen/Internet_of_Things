@@ -3,8 +3,8 @@
 #include <ArduinoJson.h>
 
 // WiFi Settings
-char ssid[] = "FRITZ!Box Fon WLAN 7340";
-char password[] = "3608432098104837";
+char ssid[] = "iPhone van Martijn";
+char password[] = "wortels18";
 
 // Init
 int oneGreen = D1;
@@ -21,7 +21,7 @@ int buttonState = 0;
 
 // Setup Wifi Client + Ip
 WiFiClient server;
-IPAddress ip(192,168,178,114);
+IPAddress ip(172,20,10,4);
 
 void setup() {  
   
@@ -40,7 +40,6 @@ void setup() {
 
   // Confirm Wifi Connection
   Serial.println("WiFi connected");  
-  Serial.println("IP address: 192.168.178.114");
 }
 
 void loop() {
@@ -56,7 +55,7 @@ void getRequest() {
 
   if (server.connect(ip, 3000)) { // Run if you're connected to your server
     server.print(String("GET ") + "/data/ledState.json" + " HTTP/1.1\r\n" +
-   "Host: " + "192.168.178.114:3000" + "\r\n" + 
+   "Host: " + "172.20.10.4:3000" + "\r\n" + 
    "Connection: keep-alive\r\n\r\n"); 
 
    delay(500);
@@ -113,9 +112,9 @@ void getRequest() {
       } else  if ( strcmp(json_parsed["ledState"], "off") == 0 ) {
         Serial.println("json = off");
         
-        setOne(120, 120);
-        setTwo(120, 120);
-        setThree(120, 120);
+        setOne(0, 0);
+        setTwo(0, 0);
+        setThree(0, 0);
 
       } else  if ( strcmp(json_parsed["ledState"], "blink") == 0 ) {
         Serial.println("json = blink");
@@ -162,7 +161,7 @@ void postRequest() {
   // and the helping hand to setup the server!
   if (server.connect(ip, 3000)) { // Run if you're connected to your server
     server.println("POST / HTTP/1.1");
-    server.println("Host: 192.168.178.114:3000");
+    server.println("Host: 172.20.10.4:3000");
     server.println("Content-Type: application/x-www-form-urlencoded");
     server.println("Connection: close");
     server.print("Content-Length: ");
